@@ -1,12 +1,10 @@
-from flask import Flask
+from extensions import create_app
+from models import Shipment
 
 
-app = Flask(__name__)
+application = create_app()
 
 
-@app.route('/', methods=['GET'])
+@application.route('/', methods=['GET'])
 def index():
     return 'Hello World!'
-
-
-app.run()
