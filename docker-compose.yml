@@ -2,10 +2,10 @@ version: '3'
 
 services:
   backend:
-    build: ./backend
+    build: backend
     stdin_open: true
     tty: true
-    working_dir: /home/application/backend
+    working_dir: /home/backend
     command: python -m flask run --port 5000 --host=0.0.0.0
     environment:
       - FLASK_APP=application.py
@@ -14,5 +14,14 @@ services:
     ports:
       - 5000:5000
     volumes:
-      - ./docker-data:/home/application/docker-data
-      - ./backend:/home/application/backend
+      - ./docker-data:/home/docker-data
+      - ./backend:/home/backend
+
+  frontend:
+    build: frontend
+    working_dir: /home/frontend
+    ports:
+      - 3000:3000
+    volumes:
+      - ./frontend:/home/frontend
+      - /home/frontend/node_modules
