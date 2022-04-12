@@ -54,7 +54,7 @@ class ShipmentResource(BaseResource):
     
     def _retrieve(self, shipment_id: int) -> Response:
         shipment: Shipment = ShipmentManager.get_shipment_by_id(shipment_id)
-        return jsonify(FullShipmentSchema().dump(shipment)), codes.OK
+        return jsonify(FullShipmentSchema().dump(shipment))
 
     def get(self, shipment_id: Optional[int] = None) -> Response:
         if shipment_id:

@@ -2,6 +2,7 @@ import os
 
 
 __all__ = [
+    "ALLOWED_ORIGINS",
     "SQLALCHEMY_DATABASE_URI",
     "SQLALCHEMY_TRACK_MODIFICATIONS",
 ]
@@ -14,6 +15,9 @@ def bool_from_env(key, default="true") -> bool:
 
 
 DEBUG = bool_from_env(key="FLASK_DEBUG", default="false")
+
+ALLOWED_ORIGINS = [
+]
 
 SQLALCHEMY_TRACK_MODIFICATIONS = bool_from_env(
     key="SQLALCHEMY_TRACK_MODIFICATIONS", default="false"

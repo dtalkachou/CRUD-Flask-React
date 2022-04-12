@@ -11,10 +11,10 @@ def _handle_response_obj_with_status_code(func):
         return jsonify(data), 200
     ```
     """
-    def wrapped_function(*args, **kwargs):
+    def wrapper(*args, **kwargs):
         return make_response(func(*args, **kwargs))
 
-    return wrapped_function
+    return wrapper
 
 
 class BaseResource(Resource):

@@ -11,4 +11,4 @@ application = create_app()
 def handle_error(e):
     if isinstance(e, HTTPException):
         return e
-    return jsonify('Error'), codes.INTERNAL_SERVER_ERROR
+    return jsonify({'message': 'Unexpected error'}), codes.INTERNAL_SERVER_ERROR

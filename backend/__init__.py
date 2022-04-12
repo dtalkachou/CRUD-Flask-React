@@ -3,7 +3,7 @@ import os
 from flask import Flask
 
 from .api import api_blueprint
-from .extensions import db, ma, migrate
+from .extensions import db, ma, migrate, cors
 from .utils import ExtendedJSONEncoder
 
 
@@ -21,6 +21,8 @@ def create_app():
 
     os.environ.setdefault('CONFIG', 'config/base.py')
     app.config.from_envvar('CONFIG')
+
+    cors.init_app(app, origins=app.config['ALLOWED_ORIGINS'])
 
     db.init_app(app)
     migrate.init_app(app, db, compare_type=True, compare_server_default=True)
