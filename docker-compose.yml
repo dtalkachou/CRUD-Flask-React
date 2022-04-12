@@ -6,11 +6,11 @@ services:
     stdin_open: true
     tty: true
     working_dir: /home/backend
-    command: python -m flask run --port 5000 --host=0.0.0.0
+    entrypoint: bin/entrypoint.sh
     environment:
       - FLASK_APP=application.py
-    env_file:
-      - docker-env/be.env
+      - FLASK_DEBUG=true
+      - CONFIG=config/local.py
     ports:
       - 5000:5000
     volumes:
