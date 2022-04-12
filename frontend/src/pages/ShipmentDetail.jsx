@@ -24,8 +24,8 @@ const ShipmentDetail = () => {
   const [{ isPending, error }, dispatchRequest] = useRequestReducer(getProcess)
 
   const onSuccessActionEdit = useCallback((data) => (
-    null
-  ), [])
+    setShipment((prevData) => ({...prevData, ...data}))
+  ), [setShipment])
 
   useEffect(() => {
     dispatchRequest((data) => {

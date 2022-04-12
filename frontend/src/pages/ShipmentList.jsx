@@ -1,4 +1,6 @@
-import React, { useEffect, useState } from 'react'
+import React, { useEffect } from 'react'
+import { connect } from 'react-redux'
+import { loadShipments } from '../actions'
 import useRequestReducer from '../hooks/useRequestReducer'
 import { getShipments } from '../utils/shipmentsAPI'
 import CenteredLoader from '../components/CenteredLoader'
@@ -6,13 +8,12 @@ import ShipmentsTable from '../components/ShipmentsTable'
 import ShipmentCreateModal from '../components/ShipmentCreateModal'
 
 
-const ShipmentsList = () => {
-  const [shipments, setShipments] = useState()
+const ShipmentsList = ({ loadShipments }) => {
   const [{ isPending, error }, dispatchRequest] = useRequestReducer(getShipments)
 
   useEffect(() => {
     dispatchRequest((data) => {
-      setShipments(data)
+      loadShipments(data)
     })
   }, [])
 
@@ -22,10 +23,19 @@ const ShipmentsList = () => {
       {!isPending && !error && <ShipmentCreateModal />}
       <hr/>
       {isPending && <CenteredLoader color="primary" />}
-      {shipments && <ShipmentsTable shipments={shipments}/>}
+      <ShipmentsTable />
       {error && <p className="text-center text-danger">{error.message}</p>}
     </>
   )
 }
 
-export default ShipmentsList
+const mapStateToProps = (state) => ({})
+
+const mapDispatchToProps = (dispatch) => ({
+  loadShipments: (data) => dispatch(loadShipments(data))
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ShipmentsList)

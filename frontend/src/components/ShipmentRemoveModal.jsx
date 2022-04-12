@@ -1,10 +1,12 @@
 import React, { useCallback, useState } from 'react'
+import { connect } from 'react-redux'
 import { Alert, Button, Modal, ModalHeader, ModalBody, ModalFooter, Spinner } from 'reactstrap'
+import { removeShipment } from '../actions'
 import { deleteShipment } from '../utils/shipmentsAPI'
 import useRequestReducer from '../hooks/useRequestReducer'
 
 
-const ShipmentRemoveModal = ({ shipmentId }) => {
+const ShipmentRemoveModal = ({ shipmentId, removeShipment }) => {
   const [{ isPending, error }, dispatchRequest] = useRequestReducer(() => deleteShipment(shipmentId))
   const [isOpen, setIsOpen] = useState(false)
 
@@ -15,8 +17,9 @@ const ShipmentRemoveModal = ({ shipmentId }) => {
   const handleRemove = useCallback(() => {
     dispatchRequest(() => {
       onClose()
+      removeShipment(shipmentId)
     })
-  }, [dispatchRequest, onClose])
+  }, [dispatchRequest, removeShipment, shipmentId, onClose])
 
   return (
     <>
@@ -38,4 +41,13 @@ const ShipmentRemoveModal = ({ shipmentId }) => {
   )
 }
 
-export default ShipmentRemoveModal
+const mapStateToProps = (state) => ({})
+
+const mapDispatchToProps = (dispatch) => ({
+  removeShipment: (id) => dispatch(removeShipment(id))
+})
+
+export default connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(ShipmentRemoveModal)
