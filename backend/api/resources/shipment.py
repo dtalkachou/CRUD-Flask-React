@@ -1,5 +1,3 @@
-import json
-from re import S
 from typing import Dict, List, Optional, Tuple, Union
 
 from flask import request, Response, jsonify
@@ -7,11 +5,7 @@ from requests import codes
 from werkzeug.exceptions import BadRequest, NotFound
 
 from backend.extensions import db
-from backend.schemas import (
-    FullShipmentSchema,
-    PublicShipmentSchema,
-    ShipmentUpdateSchema,
-)
+from backend.schemas import ShipmentSchema, OptionalShipmentSchema
 from backend.models import Shipment
 from .base import BaseResource
 
@@ -32,7 +26,7 @@ class ShipmentResource(BaseResource):
     def post(self) -> Tuple[Response, int]:
         json_data: Dict = request.get_json(force=True)
 
-        errors: Dict = PublicShipmentSchema().validate(json_data)
+        errors: Dict = ShipmentSchema().validate(json_data)
         if errors:
             raise BadRequest(errors)
 
@@ -46,15 +40,15 @@ class ShipmentResource(BaseResource):
         db.session.add(shipment)
         db.session.commit()
 
-        return jsonify(FullShipmentSchema().dump(shipment)), codes.CREATED
+        return jsonify(ShipmentSchema().dump(shipment)), codes.CREATED
 
     def _list(self) -> Response:
         shipments: List[Shipment] = Shipment.query.all()
-        return jsonify(FullShipmentSchema(many=True).dump(shipments))
+        return jsonify(ShipmentSchema(many=True).dump(shipments))
     
     def _retrieve(self, shipment_id: int) -> Response:
         shipment: Shipment = ShipmentManager.get_shipment_by_id(shipment_id)
-        return jsonify(FullShipmentSchema().dump(shipment))
+        return jsonify(ShipmentSchema().dump(shipment))
 
     def get(self, shipment_id: Optional[int] = None) -> Response:
         if shipment_id:
@@ -64,7 +58,7 @@ class ShipmentResource(BaseResource):
 
     def _update(
         self,
-        schema: Union[PublicShipmentSchema, ShipmentUpdateSchema],
+        schema: Union[ShipmentSchema, OptionalShipmentSchema],
         shipment_id: int
     ) -> Tuple[Response, int]:
         json_data: Dict = request.get_json(force=True)
@@ -79,13 +73,13 @@ class ShipmentResource(BaseResource):
         
         db.session.commit()
 
-        return jsonify(FullShipmentSchema().dump(shipment))
+        return jsonify(ShipmentSchema().dump(shipment))
 
     def put(self, shipment_id: int) -> Tuple[Response, int]:
-        return self._update(PublicShipmentSchema, shipment_id)
+        return self._update(ShipmentSchema, shipment_id)
 
     def patch(self, shipment_id: int) -> Tuple[Response, int]:
-        return self._update(ShipmentUpdateSchema, shipment_id)
+        return self._update(OptionalShipmentSchema, shipment_id)
 
     def delete(self, shipment_id: int) -> Response:
         shipment: Shipment = ShipmentManager.get_shipment_by_id(shipment_id)

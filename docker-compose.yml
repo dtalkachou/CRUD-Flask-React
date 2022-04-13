@@ -14,8 +14,8 @@ services:
     ports:
       - 5000:5000
     volumes:
-      - ./docker-data:/home/docker-data
       - ./backend:/home/backend
+      - ./docker-data:/home/docker-data
 
   frontend:
     build: frontend
